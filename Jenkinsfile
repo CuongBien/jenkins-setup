@@ -13,9 +13,8 @@ pipeline {
                 checkout scm
             }
         }
-    }
 
-    stage('Setup Python Environment') {
+        stage('Setup Python Environment') {
         steps {
             echo 'Setting up Python environment...'
             sh '''
@@ -79,14 +78,15 @@ pipeline {
             }
         }
     }
-    stage('Cleanup') {
-        steps {
-            echo 'Cleaning up...'
-            sh '''
-                docker rmi ${DOCKER_IMAGE}:${DOCKER_TAG} || true
-                docker rmi ${DOCKER_IMAGE}:latest || true
-                rm -rf venv
-            '''
+        stage('Cleanup') {
+            steps {
+                echo 'Cleaning up...'
+                sh '''
+                    docker rmi ${DOCKER_IMAGE}:${DOCKER_TAG} || true
+                    docker rmi ${DOCKER_IMAGE}:latest || true
+                    rm -rf venv
+                '''
+            }
         }
     }
 
@@ -98,10 +98,10 @@ pipeline {
         failure {
             echo 'Pipeline failed!'
         }
-    }
-    always {
-        echo 'Cleaning workspace...'
-        cleanWs()
+        always {
+            echo 'Cleaning workspace...'
+            cleanWs()
+        }
     }
 }
 
