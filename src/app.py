@@ -46,6 +46,13 @@ async def root():
         }
     }
 
+@app.get("/health")
+async def health():
+    return {
+        "status": "healthy",
+        "model_loaded": model is not None
+    }
+
 @app.post("/predict", response_model=PredictionOutput)
 async def predict(input_data: PredictionInput):
     if model is None:
